@@ -1,0 +1,16 @@
+version: "3"
+services:
+ dev-db:
+  container_name: pwpsql
+  image: postgres:13
+  environment:
+   - POSTGRES_USER=$DB_USER
+   - POSTGRES_PASSWORD=$DB_PASSWORD
+   - POSTGRES_DB=$DB_NAME
+  ports:
+   - $DB_PORT:$DB_PORT
+  volumes:
+  # Mapping between container's internal postgres data directory to local machine
+   - ./server/db/data:/var/lib/postgresql/data
+  restart: always
+  command: -p $DB_PORT

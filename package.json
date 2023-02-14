@@ -1,0 +1,28 @@
+{
+  "name": "period-wealth",
+  "version": "1.0.0",
+  "description": "A full-stack React app for locating free period products",
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint",
+    "migrate": "knex migrate:latest --knexfile server/knexfile.js",
+    "seed:dev": "knex seed:run --knexfile server/knexfile.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/vanessavmac/period-wealth.git"
+  },
+  "author": "Vanessa Mac",
+  "license": "ISC",
+  "homepage": "https://github.com/vanessavmac/period-wealth#readme",
+  "dependencies": {
+    "dotenv": "^16.0.3",
+    "knex": "^2.4.2",
+    "next": "^13.1.6",
+    "pg": "^8.9.0",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0"
+  }
+}
