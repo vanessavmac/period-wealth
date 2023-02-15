@@ -1,16 +1,40 @@
 version: "3"
 services:
- dev-db:
-  container_name: pwpsql
-  image: postgres:13
-  environment:
-   - POSTGRES_USER=$DB_USER
-   - POSTGRES_PASSWORD=$DB_PASSWORD
-   - POSTGRES_DB=$DB_NAME
-  ports:
-   - $DB_PORT:$DB_PORT
-  volumes:
-  # Mapping between container's internal postgres data directory to local machine
-   - ./server/db/data:/var/lib/postgresql/data
-  restart: always
-  command: -p $DB_PORT
+  dev-db:
+    container_name: pwpsql
+    image: postgres:13
+    environment:
+      - POSTGRES_USER=$DB_USER
+      - POSTGRES_PASSWORD=$DB_PASSWORD
+      - POSTGRES_DB=$DB_NAME
+      - TZ='GMT-5'
+      - PGTZ='GMT-5'
+    ports:
+      - $DB_PORT:$DB_PORT
+    volumes:
+      # Mapping between container's internal postgres data directory to local machine
+      - ./server/db/data:/var/lib/postgresql/data
+    restart: always
+    command: -p $DB_PORT
+  dev-server:
+    container_name: pwserver
+    depends_on:
+      - dev-db
+    build: ./server
+    environment:
+      - NODE_ENV=$API_NODE_ENV
+      - PORT=$API_PORT # connect to db container using node-postgres and docker-compose orchestration
+      - PGHOST=dev-db
+      - PGPORT=$DB_PORT
+      - PGUSER=$DB_USER
+      - PGPASSWORD=$DB_PASSWORD
+      - PGDATABASE=$DB_NAME
+      - TZ='GMT-5'
+      - PGTZ='GMT-5'
+    ports:
+      - $API_PORT:$API_PORT
+    volumes:
+      # mounts a name volume to container's internal /periodwealth dir to src files for hot-reloading
+      - ./server:/periodwealth
+      # overwrites and mounts volume to save node_modules to container
+      - ./server:/node_modules:/periodwealth/node_modules

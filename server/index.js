@@ -1,11 +1,13 @@
-require('dotenv').config({path: '../.env'});
-import express from "express";
-import cors from "cors";
-const https = require('https')
+const express = require("express");
+const cors = require("cors");
+const https = require("https");
+const { Pool } = require("pg");
+const pool = new Pool();
 
 // import api from './api';
 
 const app = express();
+// .env variables available in the docker environment
 const port = process.env.PORT;
 
 // /**
@@ -26,3 +28,15 @@ app.use(express.urlencoded({ extended: true }));
 //  * CORS will not block requests from places like CURL, postman, or other web servers.
 //  */
 app.use(cors());
+
+app.get("/test", async (req, res) => {
+  try {
+    const { rows } = await pool.query("SELECT NOW()");
+    res.status(200).send(rows[0].now);
+  } catch (err) {
+    console.log(err);
+  }
+});
+app.listen(port, () => {
+  console.log("server listening at port " + port);
+});
