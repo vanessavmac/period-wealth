@@ -1,7 +1,7 @@
 version: "3"
 services:
   dev-db:
-    container_name: pwpsql
+    container_name: pw_psql
     image: postgres:13
     environment:
       - POSTGRES_USER=$DB_USER
@@ -16,8 +16,8 @@ services:
       - ./server/db/data:/var/lib/postgresql/data
     restart: always
     command: -p $DB_PORT
-  dev-server:
-    container_name: pwserver
+  dev-api:
+    container_name: pw_api
     depends_on:
       - dev-db
     build: ./server
@@ -37,4 +37,20 @@ services:
       # mounts a name volume to container's internal /periodwealth dir to src files for hot-reloading
       - ./server:/periodwealth
       # overwrites and mounts volume to save node_modules to container
-      - ./server:/node_modules:/periodwealth/node_modules
+      - ./server/node_modules:/periodwealth/node_modules
+  # pw-app:
+  #   container_name: pw_app
+  #   build: ./app
+  #   environment:
+  #     - NODE_ENV=$UI_NODE_ENV
+  #     - PORT=$UI_PORT
+  #     - REACT_APP_API_HOST=$REACT_APP_API_HOST
+  #   # Difference between ports and expose: https://stackoverflow.com/questions/40801772/what-is-the-difference-between-ports-and-expose-in-docker-compose
+  #   ports:
+  #     - $UI_PORT:$UI_PORT
+  #   volumes:
+  #     - ./app:/periodwealth
+  #     - ./app/node_modules:/periodwealth/node_modules
+  #   # You use stdin_open when you need to work on a project outside the Docker container.
+  #   # To test this out, try running docker-compose up with either tty or stdin_open but not both and you'll find that with stdin_open you don't log in to the container's terminal while the opposite happens with tty.
+  #   stdin_open: true

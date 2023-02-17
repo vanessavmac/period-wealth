@@ -27,7 +27,13 @@ app.use(express.urlencoded({ extended: true }));
 //  * array provided. This only applies to web browsers,
 //  * CORS will not block requests from places like CURL, postman, or other web servers.
 //  */
-app.use(cors());
+app.use(
+  cors({
+    origin: [
+      /^http:\/\/localhost:[0-9]{4}$/, // CLIENT_URI should hold the cms client uri
+    ],
+  })
+);
 
 app.get("/test", async (req, res) => {
   try {
@@ -37,6 +43,7 @@ app.get("/test", async (req, res) => {
     console.log(err);
   }
 });
+
 app.listen(port, () => {
   console.log("server listening at port " + port);
 });
