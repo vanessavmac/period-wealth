@@ -4,10 +4,10 @@ const baseUrl =
   process.env.NODE_ENV === "production" ? "" : "http://localhost:8080/api";
 
 const getHeaders = () => {
-  const user = localStorage.getItem("user") || null;
+  const user = JSON.parse(localStorage.getItem("user")) || null;
   return {
     headers: {
-      Authorization: JSON.parse(user).token || '',
+      Authorization: user?.token || '',
     },
   };
 };
