@@ -1,7 +1,6 @@
 version: "3"
 services:
   dev-db:
-    container_name: pw_psql
     image: postgres:13
     environment:
       - POSTGRES_USER=$DB_USER
@@ -15,22 +14,11 @@ services:
       # Mapping between container's internal postgres data directory to local machine
       - ./server/db/data:/var/lib/postgresql/data
     restart: always
-    command: -p $DB_PORT
   dev-api:
-    container_name: pw_api
     depends_on:
       - dev-db
     build: ./server
-    environment:
-      - NODE_ENV=$API_NODE_ENV
-      - PORT=$API_PORT # connect to db container using node-postgres and docker-compose orchestration
-      - PGHOST=dev-db
-      - PGPORT=$DB_PORT
-      - PGUSER=$DB_USER
-      - PGPASSWORD=$DB_PASSWORD
-      - PGDATABASE=$DB_NAME
-      - TZ='GMT-5'
-      - PGTZ='GMT-5'
+    env_file: .env
     ports:
       - $API_PORT:$API_PORT
     volumes:

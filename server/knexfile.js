@@ -1,20 +1,12 @@
-const path = require("path");
-require('dotenv').config({path: '../.env'})
-
 /**
  * @type { Object.<string, import("knex").Knex.Config> }
  */
-module.exports = {
+export default {
   development: {
     client: "pg",
-    // DATABASE_URL=postgres://<user>:<password>@localhost:5432/<database_name>
-    connection: "postgresql://pwdevelop:pwdevelop@localhost:5432/pw_develop",
+    connection: process.env.PG_CONNECTION_STRING,
     migrations: {
       tableName: "knex_migrations",
-      directory: path.join(__dirname, "./migrations"),
-    },
-    seeds: {
-      directory: path.join(__dirname, "./seeds")
     }
   },
 
