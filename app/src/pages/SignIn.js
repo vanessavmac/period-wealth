@@ -14,7 +14,7 @@ export default function SignIn() {
         <Link to="/">Go Back</Link>
       </nav>
       <header style={{ textAlign: "center" }}>
-        <h1>Login to continue</h1>
+        <h1>Login</h1>
       </header>
       <main
         style={{
