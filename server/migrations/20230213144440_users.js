@@ -1,5 +1,3 @@
-// REPLACE WITH NEWER MIGRATION, OUTDATED
-
 /**
  * @param { import("knex").Knex } knex
  * @returns { Promise<void> }
