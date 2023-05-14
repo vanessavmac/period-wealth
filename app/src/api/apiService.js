@@ -3,12 +3,13 @@ import axios from "axios";
 const baseUrl =
   process.env.NODE_ENV === "production" ? "" : "http://localhost:8080/api";
 
-const getHeaders = () => {
+const getHeaders = (params={}) => {
   const user = JSON.parse(localStorage.getItem("user")) || null;
   return {
     headers: {
       Authorization: user?.token || '',
     },
+    ...params
   };
 };
 
@@ -16,10 +17,7 @@ const prepareQueryParams = () => {};
 
 export const apiService = {
   get: (url, params = {}) => {
-    if (params !== {}) {
-      url = `${url}?${prepareQueryParams(params)}`;
-    }
-    return axios.get(baseUrl + url, getHeaders()).then((res) => res.data);
+    return axios.get(baseUrl + url, getHeaders(params)).then((res) => res.data);
   },
   post: (url, data = {}) =>
     axios.post(baseUrl + url, data, getHeaders()).then((res) => res.data),
